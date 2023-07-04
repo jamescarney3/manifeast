@@ -1,0 +1,29 @@
+version: '3.7'
+
+volumes:
+  manifeast-db: {}
+
+services:
+  api:
+    build: api
+    ports:
+      - 3000:3000
+    volumes:
+      - ./api/manifeast:/usr/src/app
+    environment:
+      - POSTGRES_PASSWORD=manifeast_password
+      - POSTGRES_USER=manifeast_user
+      - POSTGRES_DB=manifeast_development
+      - POSTGRES_HOST=db
+    command: [ "rails", "s", "-b", "0.0.0.0" ]
+
+  db:
+    image: postgres:15.3
+    ports:
+      - 5432:5432
+    volumes:
+      - manifeast-db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=manifeast_password
+      - POSTGRES_USER=manifeast_user
+      - POSTGRES_DB=manifeast_development
