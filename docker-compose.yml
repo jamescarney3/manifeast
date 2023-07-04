@@ -17,6 +17,34 @@ services:
       - POSTGRES_HOST=db
     command: [ "rails", "s", "-b", "0.0.0.0" ]
 
+  client:
+    # long format here for multi-stage build; stop at empty development
+    # stage in dockerfile so the container doesn't try to do production
+    # builds when it starts up here
+    build:
+      context: ./client
+      target: development
+      # target: production
+    ports:
+      - 1234:1234 # parcel dev server uses port 1234 by default
+    # these are for locally testing the nginx server, but both will need to be
+    # set in the production client service
+    environment:
+      # this matches parcel's favored port and the one that this service exposes
+      # in the docker compose environment
+      - PORT=1234
+      # name of the api service and port for local api service in docker
+      # compose; for configuring nginx reverse proxy, currently unused
+      # - API_LOCATION=api:5000
+    volumes:
+      - ./client/src:/app/src
+      # following may be unnecessary if it's not too much of a pain to rebuild
+      # container during development when dependencies or settings change
+      - ./client/package.json:/app/package.json
+      - ./client/yarn.lock:/app/yarn.lock
+      - ./client/tsconfig.json:/app/tsconfig
+    command: [ "yarn", "start" ] # start parcel dev server
+
   db:
     image: postgres:15.3
     ports:
