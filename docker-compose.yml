@@ -15,6 +15,7 @@ services:
       - POSTGRES_USER=manifeast_user
       - POSTGRES_DB=manifeast_development
       - POSTGRES_HOST=db
+      - CLIENT_ORIGIN=http://localhost:1234
     command: [ "rails", "s", "-b", "0.0.0.0" ]
 
   client:
