@@ -5,16 +5,25 @@
   "scripts": {
     "start": "parcel src/index.html",
     "build": "parcel build src/index.html",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha"
   },
   "author": "jamescarney3",
   "license": "MIT",
   "devDependencies": {
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^20.3.3",
+    "@typescript-eslint/eslint-plugin": "^5.61.0",
+    "@typescript-eslint/parser": "^5.61.0",
     "assert": "^2.0.0",
     "buffer": "^5.5.0||^6.0.0",
+    "chai": "^4.3.7",
     "crypto-browserify": "^3.12.0",
+    "eslint": "^8.44.0",
     "events": "^3.1.0",
+    "global-jsdom": "^9.0.1",
     "https-browserify": "^1.0.0",
+    "jsdom": "^22.1.0",
+    "mocha": "^10.2.0",
     "os-browserify": "^0.3.0",
     "parcel": "^2.9.2",
     "path-browserify": "^1.0.0",
@@ -22,7 +31,16 @@
     "querystring-es3": "^0.2.1",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.1.0",
+    "ts-node-register": "^1.0.0",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.1.6",
+    "typescript-eslint": "^0.0.1-alpha.0",
     "url": "^0.11.0",
     "util": "^0.12.3"
+  },
+  "dependencies": {
+    "axios": "^1.4.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }

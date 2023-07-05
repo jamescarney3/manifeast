@@ -1,0 +1,9 @@
+{
+  "require": ["tsconfig-paths/register", "ts-node/register", "global-jsdom/register"],
+  "extensions": ["ts", "tsx"],
+  "spec": "test/**/*.test.{ts,tsx}",
+  "node-option": [
+    "experimental-specifier-resolution=node",
+    "loader=ts-node/esm"
+  ]
+}
