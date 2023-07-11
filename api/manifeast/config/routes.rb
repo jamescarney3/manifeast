@@ -4,9 +4,11 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "application#root"
 
-  namespace :api do
+  namespace :api, defaults: { format: :json } do
     namespace :v1 do
-      get '/', to: 'application#index'
+      get '/', to: 'application#api_root'
+      resources :users, only: [:create]
+      resource :session, only: [:create, :show]
     end
   end
 end

@@ -7,7 +7,7 @@ services:
   api:
     build: api
     ports:
-      - 3000:3000
+      - 127.0.0.1:3000:3000
     volumes:
       - ./api/manifeast:/usr/src/app
     environment:
@@ -16,7 +16,16 @@ services:
       - POSTGRES_DB=manifeast_development
       - POSTGRES_HOST=db
       - CLIENT_ORIGIN=http://localhost:1234
-    command: [ "rails", "s", "-b", "0.0.0.0" ]
+    command: [
+      "rails",
+      "s",
+      "-b",
+      "0.0.0.0",
+      "-e",
+      "development"
+    ]
+    stdin_open: true
+    tty: true # need this for debugging
 
   client:
     # long format here for multi-stage build; stop at empty development
