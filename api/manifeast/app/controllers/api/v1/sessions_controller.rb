@@ -5,7 +5,7 @@ class Api::V1::SessionsController < Api::V1::ApplicationController
       @token = issue_token @user
       render :show
     else
-      render json: {error: "Incorrect email or password"}, status: 422
+      render json: ['Incorrect email or password'], status: 422
     end
   end
 
@@ -15,7 +15,7 @@ class Api::V1::SessionsController < Api::V1::ApplicationController
       @token = request_token
       render :show
     else
-      render json: {error: 'User not logged in / could not be found'}, status: 422
+      render json: ['User not logged in / could not be found'], status: 422
     end
   end
 
