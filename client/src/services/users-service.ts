@@ -8,8 +8,9 @@ export const createUser = (email, password): Promise<Models.User> => {
     kyClient.post('users', { json: data })
       .json()
       .then((data) => {
+        const user = { id: data.id, email: data.email };
         localStorage.setItem('jwt', data.jwt);
-        resolve(data.user);
+        resolve(user);
       })
       .catch((error) => error.response.json())
       .then((messages) => reject(messages));
