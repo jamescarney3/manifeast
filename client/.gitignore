@@ -4,3 +4,5 @@ yarn-error.log
 unused
 
 .parcel-cache
+
+.nyc_output
