@@ -1,9 +1,9 @@
 import kyClient from 'services/base';
-import { Models } from 'types';
+import { User } from 'types/models';
 
 
-export const createUser = (email, password): Promise<Models.User> => {
-  return new Promise<Models.User>((resolve, reject) => {
+export const createUser = (email, password): Promise<User> => {
+  return new Promise<User>((resolve, reject) => {
     const data = { user: { email, password } };
     kyClient.post('users', { json: data })
       .json()
