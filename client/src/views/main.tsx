@@ -6,6 +6,7 @@ import { AppLayout } from 'layouts';
 import { NavBar } from 'components';
 import Login from 'views/login';
 import Dashboard from 'views/dashboard';
+import { NewEvent, ShowEvent } from 'views/events';
 
 
 const App = () => {
@@ -20,6 +21,8 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/events/new" element={<NewEvent />} />
+              <Route path="/events/:id" element={<ShowEvent />} />
             </Routes>
           </AppLayout.Main>
         </AppLayout>

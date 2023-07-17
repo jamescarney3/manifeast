@@ -20,7 +20,6 @@ const useNavBarState = () => {
   useEffect((): void  => {
     sessionsService.signInWithToken()
       .then((data) => signIn(data))
-      .catch(() => navigate('/login'))
       .finally(() => setReady(true));
   }, [sessionsService, signIn, setReady]);
 
