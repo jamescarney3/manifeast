@@ -24,3 +24,13 @@ export type Meal = {
   mealType: string,
   notes?: string,
 }
+
+export type Component = {
+  id: number,
+  mealId: number,
+  eventId: number,
+  name: string,
+  amount: number,
+  unit: string,
+  completed: boolean,
+}

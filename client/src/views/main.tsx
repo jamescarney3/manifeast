@@ -6,6 +6,7 @@ import Login from 'views/login';
 import { Dashboard } from 'views/layouts';
 import { NewEvent, ShowEvent } from 'views/events';
 import { ShowMeal, NewMeal } from 'views/meals';
+import { NewComponent } from 'views/components';
 
 
 const App = () => {
@@ -19,7 +20,11 @@ const App = () => {
             <Route path="events/new" element={<NewEvent />} />
             <Route path="events/:id" element={<Outlet />}>
               <Route index element={<ShowEvent />} />
-              <Route path="meals/:mealId" element={<ShowMeal />} />
+              <Route path="meals" element={<Outlet />}>
+                <Route path=":mealId" element={<ShowMeal />}>
+                  <Route path="components/new" element={<NewComponent />} />
+                </Route>
+              </Route>
               <Route path="meals/new" element={<NewMeal />} />
             </Route>
             <Route path="*" element={<div>[[ not found placeholder ]]</div>} />

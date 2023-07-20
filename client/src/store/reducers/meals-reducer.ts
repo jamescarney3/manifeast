@@ -5,8 +5,6 @@ import { Meal } from 'types/models';
 import { Action, NormalizedStoreResource } from 'types/store';
 
 
-const { normalizeResource } = storeUtils;
-
 // named export becuase this needs to get passed directly to useReducer
 export const mealsInitialState: NormalizedStoreResource<Meal> = {
   allIds: [],
@@ -20,11 +18,13 @@ const reducer = (
   const { type, data } = action;
   switch(type) {
     case mealsActionTypes.ADD_MEALS: {
-      const meals = data.map(normalizeResource);
+      const meals = (data as Array<Meal>).map((meal) => {
+        return storeUtils.normalizeResource(meal, 'components');
+      });
       return storeUtils.mergeResources<Meal>(state, meals as Array<Meal>);
     }
     case mealsActionTypes.ADD_MEAL: {
-      const meal = normalizeResource(data);
+      const meal = storeUtils.normalizeResource(data, 'components');
       return storeUtils.mergeResource<Meal>(state, meal as Meal);
     }
     case mealsActionTypes.REMOVE_MEAL: {

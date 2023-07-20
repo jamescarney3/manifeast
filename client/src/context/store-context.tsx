@@ -3,8 +3,9 @@ import { createContext, useMemo, useReducer } from 'react';
 import { userStateReducer } from 'store/reducers';
 import eventsReducer, { eventsInitialState } from 'store/reducers/events-reducer';
 import mealsReducer, { mealsInitialState } from 'store/reducers/meals-reducer';
-import { userActions, eventsActions, mealsActions } from 'store/actions';
-import { userAccessors, eventsAccessors, mealsAccessors } from 'store/accessors';
+import componentsReducer, { componentsInitialState } from 'store/reducers/components-reducer';
+import { userActions, eventsActions, mealsActions, componentsActions } from 'store/actions';
+import { userAccessors, eventsAccessors, mealsAccessors, componentsAccessors } from 'store/accessors';
 
 
 export const userInitialState = {};
@@ -15,10 +16,11 @@ export const StoreContextProvider = ({ children }) => {
   const [userState, userDispatch] = useReducer(userStateReducer, userInitialState);
   const [eventsState, eventsDispatch] = useReducer(eventsReducer, eventsInitialState);
   const [mealsState, mealsDispatch] = useReducer(mealsReducer, mealsInitialState);
+  const [componentsState, componentsDispatch] = useReducer(componentsReducer, componentsInitialState);
 
-  const state = { user: userState, events: eventsState, meals: mealsState };
+  const state = { user: userState, events: eventsState, meals: mealsState, components: componentsState };
   const dispatch = (action): void => {
-    [userDispatch, eventsDispatch, mealsDispatch].forEach((d) => d(action));
+    [userDispatch, eventsDispatch, mealsDispatch, componentsDispatch].forEach((d) => d(action));
   };
 
   const bindActionCreators = (actions) => {
@@ -34,6 +36,7 @@ export const StoreContextProvider = ({ children }) => {
     ...bindActionCreators(userActions),
     ...bindActionCreators(eventsActions),
     ...bindActionCreators(mealsActions),
+    ...bindActionCreators(componentsActions),
   }), [userActions]);
 
   const bindAccessors = (accessors) => {
@@ -49,8 +52,10 @@ export const StoreContextProvider = ({ children }) => {
     ...bindAccessors(userAccessors),
     ...bindAccessors(eventsAccessors),
     ...bindAccessors(mealsAccessors),
+    ...bindAccessors(componentsAccessors),
   }), [userAccessors, state]);
 
+  console.log(state);
   return (
     <StoreContext.Provider value={{ ...accessors, ...actions }}>{ children }</StoreContext.Provider>
   );

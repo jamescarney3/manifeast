@@ -14,6 +14,20 @@ const mergeResource = <R extends { id: number }>(
   return { allIds: newAllIds, byIds: newByIds };
 };
 
+const updateResource = <R extends { id: number }>(
+  state: NormalizedStoreResource<R>,
+  resource: R,
+): NormalizedStoreResource<R> => {
+  const { allIds, byIds } = state;
+
+  const newByIds = allIds.reduce((current, id) => {
+    const idMatch = resource.id === id;
+    return { ...current, [id] : idMatch ? resource : byIds[id] };
+  }, {});
+
+  return { allIds, byIds: newByIds };
+};
+
 const mergeResources = <R extends { id: number }>(
   state: NormalizedStoreResource<R>,
   resources: Array<R>,
@@ -39,6 +53,7 @@ const removeResource = <R extends { id: number }>(
   const newByIds = newAllIds.reduce((current, retainedId) => {
     return { ...current, [retainedId]: byIds[retainedId] };
   }, {});
+
   return { allIds: newAllIds, byIds: newByIds };
 };
 
@@ -53,4 +68,4 @@ const normalizeResource = <R>(
 };
 
 
-export default { mergeResource, mergeResources, removeResource, normalizeResource };
+export default { mergeResource, mergeResources, removeResource, updateResource, normalizeResource };

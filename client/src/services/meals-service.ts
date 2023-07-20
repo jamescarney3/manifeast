@@ -30,6 +30,7 @@ const fetchMeal = (id: number, eventId: number | string): Promise<void> => {
 };
 
 // right order for positional args? not sure! it's probably fine!
+// TODO: update - it sucks and should go in the opposite order
 const destroyMeal = (id: number, eventId: number): Promise<void> => {
   return new Promise<void>((resolve, reject) => {
     const url = ['events', eventId, 'meals', id].join('/');

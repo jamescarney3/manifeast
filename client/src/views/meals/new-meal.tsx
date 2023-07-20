@@ -17,7 +17,7 @@ const NewMeal = () => {
   const navigateToEvent = () => navigate(['/events', id].join('/'));
 
   const onSubmitMealForm = (
-    eventId: number | number,
+    eventId: number | string,
     date: string,
     mealType: string,
     name?: string,

@@ -5,8 +5,6 @@ import { Event } from 'types/models';
 import { Action, NormalizedStoreResource } from 'types/store';
 
 
-// const { normalizeResource } = storeUtils;
-
 // named export becuase this needs to get passed directly to useReducer
 export const eventsInitialState: NormalizedStoreResource<Event> = {
   allIds: [],

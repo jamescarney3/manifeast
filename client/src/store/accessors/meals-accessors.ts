@@ -5,6 +5,7 @@ import { findEvent } from 'store/accessors/events-accessors';
 
 
 export const findMealsByEventId = (state: StoreState) => (id: number | string): Array<Meal> => {
+  // account for lookups by edit token
   const event: Event = findEvent(state)(id);
   return state.meals.allIds
     .map((mealId) => state.meals.byIds[mealId])

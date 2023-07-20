@@ -13,6 +13,13 @@ export const mealsActionTypes = {
   REMOVE_MEAL: 'mealsState/REMOVE_MEAL',
 };
 
+export const componentsActionTypes = {
+  ADD_COMPONENT: 'componentsState/ADD_COMPONENT',
+  ADD_COMPONENTS: 'componentsState/ADD_COMPONENTS',
+  UPDATE_COMPONENT: 'componentsState/UPDATE_COMPONENT',
+  REMOVE_COMPONENT: 'componentsState/REMOVE_COMPONENT',
+};
+
 export const sharedActionTypes = {
   LOGOUT: 'shared/LOGOUT',
 };
