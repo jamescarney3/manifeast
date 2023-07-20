@@ -29,5 +29,28 @@ const mergeResources = <R extends { id: number }>(
   return { allIds: newAllIds, byIds: newByIds };
 };
 
+const removeResource = <R extends { id: number }>(
+  state: NormalizedStoreResource<R>,
+  id: number,
+): NormalizedStoreResource<R> => {
+  const { allIds, byIds } = state;
 
-export default { mergeResource, mergeResources };
+  const newAllIds = allIds.filter((existingId) => existingId !== id);
+  const newByIds = newAllIds.reduce((current, retainedId) => {
+    return { ...current, [retainedId]: byIds[retainedId] };
+  }, {});
+  return { allIds: newAllIds, byIds: newByIds };
+};
+
+const normalizeResource = <R>(
+  resource: R,
+  ...fields: Array<string>
+): R => {
+  return Object.keys(resource).reduce((normalizedResource, k) => {
+    if (fields.includes(k)) return normalizedResource;
+    return { ...normalizedResource, [k]: resource[k] };
+  }, {} as R);
+};
+
+
+export default { mergeResource, mergeResources, removeResource, normalizeResource };

@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { EventForm } from 'components';
 import { eventsService } from 'services';
 import { StoreContext } from 'context';
-import { Nullable } from 'types/utils';
 import { Event } from 'types/models';
 
 
@@ -12,7 +11,7 @@ const NewEvent = () => {
   const { addEvent } = useContext(StoreContext);
   const navigate = useNavigate();
 
-  const [newEventError, setNewEventError] = useState<Nullable<string>>(null);
+  const [errors, setErrors] = useState([]);
 
   const onFormSubmit = (
     startDate: string,
@@ -25,14 +24,22 @@ const NewEvent = () => {
         addEvent(event);
         navigate('/events/' + event.id);
       })
-      .catch((error) => setNewEventError(error));
+      .catch((error) => setErrors(error));
+  };
+
+  const onFormCancel = () => {
+    navigate('/');
+  };
+
+  const renderErrors = () => {
+    return errors.map((error) => (<div>{error}</div>));
   };
 
   return (
-    <div className="container">
-      <h1>[[ new event ]]</h1>
-      <div>{JSON.stringify(newEventError)}</div>
-      <EventForm onSubmit={onFormSubmit} />
+    <div className="container pt-6">
+      <h1 className="title is-1">Create Event</h1>
+      {renderErrors()}
+      <EventForm onSubmit={onFormSubmit} onCancel={onFormCancel} />
     </div>
   );
 };

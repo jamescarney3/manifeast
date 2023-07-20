@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 
 
-const EventForm = ({ onSubmit, onCancel }) => {
+type MealFormProps = {
+  eventId: number,
+  onSubmit: () => void,
+  onCanceL: () => void,
+}
+
+const MealForm = ({ eventId, onSubmit, onCancel }: MealFormProps) => {
   const [formState, setFormState] = useState({
-    startDate: null,
-    endDate: null,
-    title: null,
-    description: null,
+    date: null,
+    mealType: null,
+    name: null,
+    notes: null,
   });
 
   const generateFormChangeHandler = (key: string) => (val: string): void => {
@@ -16,12 +22,11 @@ const EventForm = ({ onSubmit, onCancel }) => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     onSubmit(
-      // required
-      formState.startDate,
-      formState.endDate,
-      // optional
-      formState.title,
-      formState.description,
+      eventId,
+      formState.date,
+      formState.mealType,
+      formState.name,
+      formState.notes,
     );
   };
 
@@ -33,44 +38,44 @@ const EventForm = ({ onSubmit, onCancel }) => {
   return (
     <form onSubmit={handleFormSubmit}>
       <div className="field">
-        <label className="label" htmlFor="title">Title</label>
+        <label className="label" htmlFor="name">Name</label>
         <div className="control">
           <input
             type="text"
-            name="title"
+            name="name"
             className="input"
-            onChange={generateFormChangeHandler('title')}
+            onChange={generateFormChangeHandler('name')}
           />
         </div>
       </div>
       <div className="field">
-        <label className="label" htmlFor="description">Description</label>
+        <label className="label" htmlFor="date">Date</label>
+        <div className="control">
+          <input
+            type="date"
+            name="date"
+            onChange={generateFormChangeHandler('date')}
+          />
+        </div>
+      </div>
+      <div className="field">
+        <label className="label" htmlFor="name">Meal Type</label>
+        <div className="control">
+          <select className="select">
+            <option value="breakfast">Breakfast</option>
+            <option value="lunch">Lunch</option>
+            <option value="dinner">Dinner</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+      <div className="field">
+        <label className="label" htmlFor="notes">Notes</label>
         <div className="control">
           <textarea
-            name="description"
+            name="notes"
             className="textarea"
-            onChange={generateFormChangeHandler('description')}
-          />
-        </div>
-      </div>
-      {/* TODO: make these look nicer */}
-      <div className="field">
-        <label className="label" htmlFor="startDate">Start Date</label>
-        <div className="control">
-          <input
-            type="date"
-            name="startDate"
-            onChange={generateFormChangeHandler('startDate')}
-          />
-        </div>
-      </div>
-      <div className="field">
-        <label className="label" htmlFor="endDate">End Date</label>
-        <div className="control">
-          <input
-            type="date"
-            name="endDate"
-            onChange={generateFormChangeHandler('endDate')}
+            onChange={generateFormChangeHandler('notes')}
           />
         </div>
       </div>
@@ -87,4 +92,4 @@ const EventForm = ({ onSubmit, onCancel }) => {
 };
 
 
-export default EventForm;
+export default MealForm;

@@ -9,10 +9,10 @@ export const findEvent = (state: StoreState) => (id: number | string): Event => 
     .find((event) => event.editToken === id);
 };
 
-export const allEvents = (state) => (): Array<Event> => {
+export const getAllEvents = (state) => (): Array<Event> => {
   const { byIds, allIds } = state.events;
   return allIds.map((id) => byIds[id]);
 };
 
 
-export default { findEvent, allEvents };
+export default { findEvent, getAllEvents };

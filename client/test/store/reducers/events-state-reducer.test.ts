@@ -16,7 +16,7 @@ describe('events state reducer', () => {
     const newState = eventsStateReducer(oldState, action);
 
     expect(newState.allIds).to.include(event.id);
-    expect(newState.byIds[event.id]).to.equal(event);
+    expect(newState.byIds[event.id]).to.deep.equal(event);
   });
 
   it('processes add events actions', () => {
@@ -30,8 +30,8 @@ describe('events state reducer', () => {
 
     expect(newState.allIds).to.include(fooEvent.id);
     expect(newState.allIds).to.include(barEvent.id);
-    expect(newState.byIds[fooEvent.id]).to.equal(fooEvent);
-    expect(newState.byIds[barEvent.id]).to.equal(barEvent);
+    expect(newState.byIds[fooEvent.id]).to.deep.equal(fooEvent);
+    expect(newState.byIds[barEvent.id]).to.deep.equal(barEvent);
   });
 
   it('processes logout actions', () => {

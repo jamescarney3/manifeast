@@ -2,8 +2,9 @@ import { createContext, useMemo, useReducer } from 'react';
 
 import { userStateReducer } from 'store/reducers';
 import eventsReducer, { eventsInitialState } from 'store/reducers/events-reducer';
-import { userActions, eventsActions } from 'store/actions';
-import { userAccessors, eventsAccessors } from 'store/accessors';
+import mealsReducer, { mealsInitialState } from 'store/reducers/meals-reducer';
+import { userActions, eventsActions, mealsActions } from 'store/actions';
+import { userAccessors, eventsAccessors, mealsAccessors } from 'store/accessors';
 
 
 export const userInitialState = {};
@@ -13,10 +14,11 @@ const StoreContext = createContext();
 export const StoreContextProvider = ({ children }) => {
   const [userState, userDispatch] = useReducer(userStateReducer, userInitialState);
   const [eventsState, eventsDispatch] = useReducer(eventsReducer, eventsInitialState);
+  const [mealsState, mealsDispatch] = useReducer(mealsReducer, mealsInitialState);
 
-  const state = { user: userState, events: eventsState };
+  const state = { user: userState, events: eventsState, meals: mealsState };
   const dispatch = (action): void => {
-    [userDispatch, eventsDispatch].forEach((d) => d(action));
+    [userDispatch, eventsDispatch, mealsDispatch].forEach((d) => d(action));
   };
 
   const bindActionCreators = (actions) => {
@@ -31,6 +33,7 @@ export const StoreContextProvider = ({ children }) => {
   const actions = useMemo(() => ({
     ...bindActionCreators(userActions),
     ...bindActionCreators(eventsActions),
+    ...bindActionCreators(mealsActions),
   }), [userActions]);
 
   const bindAccessors = (accessors) => {
@@ -45,6 +48,7 @@ export const StoreContextProvider = ({ children }) => {
   const accessors = useMemo(() => ({
     ...bindAccessors(userAccessors),
     ...bindAccessors(eventsAccessors),
+    ...bindAccessors(mealsAccessors),
   }), [userAccessors, state]);
 
   return (

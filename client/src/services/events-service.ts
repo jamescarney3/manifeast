@@ -1,7 +1,8 @@
 import kyClient from 'services/base';
 import { Event } from 'types/models';
 
-// gotta coerce dates here somehow
+
+// types for dates??
 const createEvent = (startDate, endDate, title?: string, description?: string): Promise<Event> => {
   return new Promise<Event>((resolve, reject) => {
     const data = { event: { startDate, endDate, title, description } };

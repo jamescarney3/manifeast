@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { findEvent, allEvents } from 'store/accessors/events-accessors';
+import { findEvent, getAllEvents } from 'store/accessors/events-accessors';
 import { StoreState } from 'types/store';
 
 
@@ -33,9 +33,9 @@ describe('events accessors module', () => {
     });
   });
 
-  describe('allEvents', () => {
+  describe('getAllEvents', () => {
     it('returns all events', () => {
-      const events = allEvents(state)();
+      const events = getAllEvents(state)();
       expect(events.map((e) => e.id)).to.include(1);
       expect(events.map((e) => e.id)).to.include(2);
       expect(events.map((e) => e.id)).to.include(3);

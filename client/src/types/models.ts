@@ -6,7 +6,7 @@ export type User = {
 
 export type Event = {
   id: number,
-  title?: string,
+  title: string,
   description?: string,
   // should probably be more datelike than just a string
   startDate: string,
@@ -14,4 +14,13 @@ export type Event = {
   editToken: string,
   // necessary??
   userId: number,
+}
+
+export type Meal = {
+  id: number,
+  eventId: number,
+  name: string,
+  date: string,
+  mealType: string,
+  notes?: string,
 }

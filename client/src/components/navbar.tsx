@@ -1,12 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-
-import { useNavBarState } from 'hooks';
 
 
 // TODO: this is connected so is it maybe a 'partial' view instead? tbd
-const NavBar = () => {
-  const { ready, active, displayName, loggedIn, onLoginPage, handleMenuClick, handleSignOut } = useNavBarState();
+const NavBar = ({ displayName, onLoginPage, loggedIn, onSignOut }) => {
+  const [active, setActive] = useState(false);
 
   const burgerClass = [
     'navbar-burger',
@@ -23,7 +21,6 @@ const NavBar = () => {
   ].filter(Boolean).join(' ');
 
   const renderAuthButton = () => {
-    if (!ready) return null;
     if (onLoginPage) return null;
     if (!loggedIn) {
       return (
@@ -34,7 +31,7 @@ const NavBar = () => {
       );
     } else {
       return (
-        <button className="button is-secondary" onClick={handleSignOut}>
+        <button className="button is-secondary" onClick={onSignOut}>
           <span className="icon"><i className="fas fa-sign-in-alt"></i></span>
           <span>Logout</span>
         </button>
@@ -55,7 +52,7 @@ const NavBar = () => {
           className={burgerClass}
           aria-label="menu"
           aria-expanded={burgerAriaExpanded}
-          onClick={handleMenuClick}
+          onClick={() => setActive(!active)}
         >
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
