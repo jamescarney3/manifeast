@@ -31,6 +31,10 @@ class User < ApplicationRecord
     user
   end
 
+  def meals_by_date(date)
+    meals.where(date: date)
+  end
+
   private
 
   class << self

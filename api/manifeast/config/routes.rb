@@ -9,7 +9,9 @@ Rails.application.routes.draw do
       get '/', to: 'application#api_root'
       resources :users, only: [:create]
       resource :session, only: [:create, :show]
-      resources :events, only: [:create, :index, :show]
+      resources :events, only: [:create, :index, :show] do
+        resources :meals, only: [:create, :show, :destroy]
+      end
     end
   end
 end

@@ -8,6 +8,7 @@ class Event < ApplicationRecord
   before_validation :ensure_title, on: [ :create, :update ]
 
   belongs_to :user
+  has_many :meals
 
   def self.find_by_id_or_token(id_or_token)
     (Event.where(id: id_or_token).or Event.where(edit_token: id_or_token)).first
@@ -28,6 +29,15 @@ class Event < ApplicationRecord
         "#{start_date.month}/#{start_date.day}/#{start_date.year}",
         "#{end_date.month}/#{end_date.day}/#{end_date.year}",
       ].join(' - ')
+    end
+  end
+
+  def build_meals
+    (start_date..end_date).each do |date|
+      [:breakfast, :lunch, :dinner].each do |meal_type|
+        name = "#{date.month}/#{date.day}/#{date.year} #{meal_type.to_s}"
+        meals.new(name: name, date: date, meal_type: meal_type)
+      end
     end
   end
 

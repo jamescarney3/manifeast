@@ -2,7 +2,7 @@ class Api::V1::ApplicationController < ApplicationController
   helper_method :current_user
 
   def api_root
-    render plain: 'hello from api '
+    render plain: 'hello from api'
   end
 
   def jwt_key
@@ -27,6 +27,14 @@ class Api::V1::ApplicationController < ApplicationController
 
   def current_user
     user ||= User.find_by id: decoded_token.first["user_id"]
+  end
+
+  def event_access_allowed?(identifier)
+    event = Event.find_by_id_or_token(identifier)
+    if event.edit_token == identifier or event.user == current_user
+      return true
+    end
+    false
   end
 
   def logged_in?
