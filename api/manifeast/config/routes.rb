@@ -10,7 +10,9 @@ Rails.application.routes.draw do
       resources :users, only: [:create]
       resource :session, only: [:create, :show]
       resources :events, only: [:create, :index, :show] do
-        resources :meals, only: [:create, :show, :destroy]
+        resources :meals, only: [:create, :show, :destroy] do
+          resources :components, only: [:create, :update, :destroy]
+        end
       end
     end
   end
