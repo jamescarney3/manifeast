@@ -1,11 +1,11 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom';
 
 import { StoreContextProvider} from 'context';
 import Login from 'views/login';
 import { Dashboard } from 'views/layouts';
-import { NewEvent, ShowEvent } from 'views/events';
-import { ShowMeal, NewMeal } from 'views/meals';
+import { EventContainer, EventsContainer, IndexEvents, NewEvent, ShowEvent } from 'views/events';
+import { MealContainer, ShowMeal, NewMeal } from 'views/meals';
 import { NewComponent } from 'views/components';
 
 
@@ -15,15 +15,17 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Dashboard />}>
-            <Route index element={<div>[[ landing page placeholder ]]</div>} />
+            <Route index element={<Navigate to="events" />} />
             <Route path="login" element={<Login />} />
+            <Route path="events" element={<EventsContainer />}>
+              <Route index element={<IndexEvents />} />
+            </Route>
             <Route path="events/new" element={<NewEvent />} />
-            <Route path="events/:id" element={<Outlet />}>
+            <Route path="events/:eventId" element={<EventContainer />}>
               <Route index element={<ShowEvent />} />
-              <Route path="meals" element={<Outlet />}>
-                <Route path=":mealId" element={<ShowMeal />}>
-                  <Route path="components/new" element={<NewComponent />} />
-                </Route>
+              <Route path="meals/:mealId" element={<MealContainer />}>
+                <Route index element={<ShowMeal />} />
+                <Route path="components/new" element={<NewComponent />} />
               </Route>
               <Route path="meals/new" element={<NewMeal />} />
             </Route>

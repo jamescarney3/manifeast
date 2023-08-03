@@ -1,10 +1,16 @@
 module.exports = {
+  env: {
+    "node": true,
+    "browser": true,
+    "mocha": true,
+    "es6": true,
+  },
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended"
   ],
   plugins: [
-    "@typescript-eslint"
+    "@typescript-eslint",
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
@@ -14,5 +20,6 @@ module.exports = {
   rules: {
     'no-console': 'error',
     'semi': ['error', 'always'],
+    'no-undef': ['error'],
   }
 };

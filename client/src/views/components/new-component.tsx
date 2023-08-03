@@ -6,11 +6,12 @@ import { StoreContext } from 'context';
 import { componentsService } from 'services';
 
 const NewComponent = () => {
-  const { id, mealId } = useParams();
+  const { eventId, mealId } = useParams();
   const navigate = useNavigate();
   const { addComponent } = useContext(StoreContext);
 
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState([]);
 
 
   const onSubmitComponentForm = (
@@ -20,28 +21,33 @@ const NewComponent = () => {
     amount: number,
     unit?: string,
   ): void => {
+    setErrors([]);
     setLoading(true);
     componentsService.createComponent(eventId, mealId, name, amount, unit)
       .then((component) => {
         addComponent(component);
-        navigate(['/events', id, 'meals', mealId].join('/'));
+        navigate(['/events', eventId, 'meals', mealId].join('/'));
       })
-      .catch((res) => setErrors(res))
+      .catch((res) => setErrors([res]))
       .finally(() => setLoading(false));
   };
 
   const onCancelComponentForm = () => {
-    navigate(['/events', id, 'meals', mealId].join('/'));
+    navigate(['/events', eventId, 'meals', mealId].join('/'));
   };
+
 
   if (loading) return (<div>[[ loading spinner ]]</div>);
   return (
-    <ComponentForm
-      eventId={id}
-      mealId={mealId}
-      onSubmit={onSubmitComponentForm}
-      onCancel={onCancelComponentForm}
-    />
+    <>
+      {errors.map((e) => (<div>{e}</div>))}
+      <ComponentForm
+        eventId={eventId}
+        mealId={mealId}
+        onSubmit={onSubmitComponentForm}
+        onCancel={onCancelComponentForm}
+      />
+    </>
   );
 };
 

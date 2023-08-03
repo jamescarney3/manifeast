@@ -3,6 +3,7 @@ import { storeUtils } from 'utils';
 
 import { Component } from 'types/models';
 import { Action, NormalizedStoreResource } from 'types/store';
+import { Meal } from 'types/models';
 
 
 // named export becuase this needs to get passed directly to useReducer

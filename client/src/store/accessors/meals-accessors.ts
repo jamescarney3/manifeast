@@ -1,15 +1,11 @@
-import { Event, Meal } from 'types/models';
+import { Meal } from 'types/models';
 import { StoreState } from 'types/store';
 
-import { findEvent } from 'store/accessors/events-accessors';
 
-
-export const findMealsByEventId = (state: StoreState) => (id: number | string): Array<Meal> => {
-  // account for lookups by edit token
-  const event: Event = findEvent(state)(id);
+export const findMealsByEventId = (state: StoreState) => (eventId: number | string): Array<Meal> => {
   return state.meals.allIds
     .map((mealId) => state.meals.byIds[mealId])
-    .filter((meal) => meal.eventId === event.id);
+    .filter((meal) => meal.eventId === eventId);
 };
 
 export const findMeal = (state: StoreState) => (id: number) => {

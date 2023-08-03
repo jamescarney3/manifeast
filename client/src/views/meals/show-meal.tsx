@@ -6,7 +6,7 @@ import { StoreContext } from 'context';
 
 
 const ShowMeal = () => {
-  const { id, mealId } = useParams();
+  const { eventId, mealId } = useParams();
   const navigate = useNavigate();
   const {
     findMeal,
@@ -21,21 +21,21 @@ const ShowMeal = () => {
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const meal = findMeal(mealId);
+  const meal = findMeal(mealId) || {};
   const components = findComponentsByMealId(Number(mealId));
 
   const mealExists = useMemo(() => !!findMeal(mealId));
-  const eventUrl = ['/events', id].join('/');
+  const eventUrl = ['/events', eventId].join('/');
 
   const handleDelete = () => {
      if (confirm('Really delete meal? All components will be lost')) {
        setLoading(true);
-       //TODO:  `id` is event id here... change this to be nicer
-       mealsService.destroyMeal(mealId, id)
+       //TODO:  `eventId` is event eventId here... change this to be nicer
+       mealsService.destroyMeal(mealId, eventId)
          .then(() => {
            // this is a string when it comes from the router hook
            removeMeal(Number(mealId));
-           navigate(['/events', id].join('/'));
+           navigate(['/events', eventId].join('/'));
          })
          .catch((err) => setErrors(err))
          .finally(() => setLoading(false));
@@ -44,7 +44,7 @@ const ShowMeal = () => {
 
   const deleteComponent = (component) => {
     if (confirm('Really delete component?')) {
-      componentsService.destroyComponent(id, mealId, component.id)
+      componentsService.destroyComponent(eventId, mealId, component.id)
         .then(() => removeComponent(component.id))
         .catch((err) => setErrors(err));
     }
@@ -54,24 +54,21 @@ const ShowMeal = () => {
     const completed = !component.completed;
     const updatedComponent = { ...component, completed };
     updateComponent(updatedComponent);
-    componentsService.updateComponent(id, mealId, updatedComponent)
+    componentsService.updateComponent(eventId, mealId, updatedComponent)
       .then((apiComponent) => updateComponent(apiComponent))
       .catch((err) => setErrors(err));
   };
 
   useEffect(() => {
-    if (!mealExists) {
-      setLoading(true);
-      mealsService.fetchMeal(mealId, id)
-        .then((meal) => {
-          addMeal(meal);
-          addComponents(meal.components);
-        })
-        .catch((res) => setErrors(res))
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
+    // TODO: figure out double fetch here and fix
+    if (!mealExists) setLoading(true);
+    mealsService.fetchMeal(mealId, eventId)
+      .then((meal) => {
+        addMeal(meal);
+        addComponents(meal.components);
+      })
+      .catch((res) => setErrors(res))
+      .finally(() => setLoading(false));
   }, [mealExists, mealsService, setLoading, setErrors, addMeal]);
 
   const renderErrors = () => {
@@ -93,6 +90,7 @@ const ShowMeal = () => {
               type="checkbox"
               className="checkbox"
               checked={component.completed}
+              readOnly
               onClick={() => toggleComponentCompleted(component)}
             />
             {' '}Completed
@@ -107,8 +105,6 @@ const ShowMeal = () => {
       </div>
     );
   };
-
-  // renderNewComponentForm = () =>
 
   if (loading) return (<div>[[ loading spinner ]]</div>);
   return (

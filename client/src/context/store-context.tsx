@@ -10,7 +10,7 @@ import { userAccessors, eventsAccessors, mealsAccessors, componentsAccessors } f
 
 export const userInitialState = {};
 
-const StoreContext = createContext();
+const StoreContext = createContext({});
 
 export const StoreContextProvider = ({ children }) => {
   const [userState, userDispatch] = useReducer(userStateReducer, userInitialState);
@@ -55,7 +55,6 @@ export const StoreContextProvider = ({ children }) => {
     ...bindAccessors(componentsAccessors),
   }), [userAccessors, state]);
 
-  console.log(state);
   return (
     <StoreContext.Provider value={{ ...accessors, ...actions }}>{ children }</StoreContext.Provider>
   );

@@ -7,14 +7,14 @@ import { StoreContext } from 'context';
 
 
 const NewMeal = () => {
-  const { id } = useParams();
+  const { eventId } = useParams();
   const navigate = useNavigate();
   const { addMeal } = useContext(StoreContext);
 
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const navigateToEvent = () => navigate(['/events', id].join('/'));
+  const navigateToEvent = () => navigate(['/events', eventId].join('/'));
 
   const onSubmitMealForm = (
     eventId: number | string,
@@ -24,10 +24,10 @@ const NewMeal = () => {
     notes?: string
   ) => {
     setLoading(true);
-    mealsService.createMeal(id, date, mealType, name, notes)
+    mealsService.createMeal(eventId, date, mealType, name, notes)
       .then((meal) => {
         addMeal(meal);
-        navigate(['/events', id, 'meals', meal.id].join('/'));
+        navigate(['/events', eventId, 'meals', meal.id].join('/'));
       })
       .catch((res) => setErrors(res))
       .finally(() => setLoading(false));
@@ -50,7 +50,7 @@ const NewMeal = () => {
     <div className="container pt-6">
       {errors.map((e) => (<div>{e}</div>))}
       <MealForm
-        eventId={id}
+        eventId={eventId}
         onSubmit={onSubmitMealForm}
         onCancel={onCancelMealForm}
       />

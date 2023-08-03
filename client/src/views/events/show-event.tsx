@@ -1,43 +1,25 @@
-import React, { useEffect, useMemo, useContext, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link, useOutletContext } from 'react-router-dom';
 
-import { eventsService } from 'services';
 import { StoreContext } from 'context';
 
 
+// TODO: maybe better as util function
+const formatDate = (date: string): string => {
+  return new Date(date).toLocaleDateString();
+};
+
+/*
+  singular event read view, more or less analagous to the "show" CRUD action
+  in the Rails formulation; expects to recieve
+*/
 const ShowEvent = () => {
-  const { id } = useParams();
-  const { addEvent, findEvent, addMeals, findMealsByEventId } = useContext(StoreContext);
+  const { event, eventErrors, eventLoading } = useOutletContext();
+  const { findMealsByEventId } = useContext(StoreContext);
 
-  const [showEventErrors, setShowEventErrors] = useState([]);
-  const addErrors = useMemo(() => (errorRes) => {
-    const errors = errorRes.message ? [errorRes.message] : errorRes;
-    setShowEventErrors([...showEventErrors, ...errors]);
-  }, [showEventErrors, setShowEventErrors]);
-
-  const [eventLoading, setEventLoading] = useState(false);
-
-  const event = findEvent(id) || {};
-  const meals = findMealsByEventId(id);
-
-  const isLoading = (eventLoading && !event);
-  const hasErrors = showEventErrors.length > 0;
-
-  const formatDate = (date: string): string => {
-    return new Date(date).toLocaleDateString();
-  };
-
-  useEffect(() => {
-    setShowEventErrors([]);
-    setEventLoading(true);
-    eventsService.fetchEvent(id)
-      .then((event) => {
-        addEvent(event);
-        addMeals(event.meals);
-      })
-      .catch((res) => addErrors(res))
-      .finally(() => setEventLoading(false));
-  }, [eventsService, setShowEventErrors, setEventLoading, addEvent]);
+  const meals = findMealsByEventId(event.id);
+  const shareableUrl = [window.location.origin, 'events', event.editToken].join('/');
+  const hasErrors = eventErrors.length > 0;
 
   const renderMealLink = (meal) => {
     const to = ['meals', meal.id].join('/');
@@ -49,14 +31,17 @@ const ShowEvent = () => {
     );
   };
 
-  if (isLoading) return (<div>loading spinner</div>);
-  if (hasErrors) return (<div>{JSON.stringify(showEventErrors)}</div>);
+  if (eventLoading) return (<div>loading spinner</div>);
+  if (hasErrors) return (<div>{JSON.stringify(eventErrors)}</div>);
   return (
     <div className="container pt-6">
       <div className="block">
         <h1 className="title is-1">{event.title}</h1>
+        <p className="subtitle mt-0">
+          Share via: <a href={shareableUrl}>{shareableUrl}</a>
+        </p>
         <p className="subtitle mt-0">{event.description}</p>
-        <p>{formatDate(event.startDate)} - {formatDate(event.endDate)}</p>
+        <p className="subtitle mt-0">{formatDate(event.startDate)} - {formatDate(event.endDate)}</p>
       </div>
       <div className="block">
         <h2 className="title is-2">Meals</h2>
