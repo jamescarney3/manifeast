@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Link, useParams, useNavigate, Outlet } from 'react-router-dom';
+import { Link, useParams, useNavigate, Outlet, useOutletContext } from 'react-router-dom';
 
+// import { debounce } from 'utils/lang-utils';
 import { mealsService, componentsService } from 'services';
+import { ComponentListItem } from 'components';
 import { StoreContext } from 'context';
 
 
@@ -10,19 +12,15 @@ const ShowMeal = () => {
   const navigate = useNavigate();
   const {
     findMeal,
-    findComponentsByMealId,
     addMeal,
     addComponents,
     removeMeal,
     removeComponent,
-    updateComponent,
   } = useContext(StoreContext);
+  const { meal, components, toggleComponentCompleted } = useOutletContext();
 
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const meal = findMeal(mealId) || {};
-  const components = findComponentsByMealId(Number(mealId));
 
   const mealExists = useMemo(() => !!findMeal(mealId));
   const eventUrl = ['/events', eventId].join('/');
@@ -30,33 +28,23 @@ const ShowMeal = () => {
   const handleDelete = () => {
      if (confirm('Really delete meal? All components will be lost')) {
        setLoading(true);
-       //TODO:  `eventId` is event eventId here... change this to be nicer
        mealsService.destroyMeal(mealId, eventId)
          .then(() => {
            // this is a string when it comes from the router hook
            removeMeal(Number(mealId));
            navigate(['/events', eventId].join('/'));
          })
-         .catch((err) => setErrors(err))
+         .catch((err) => setErrors([err]))
          .finally(() => setLoading(false));
      }
   };
 
   const deleteComponent = (component) => {
-    if (confirm('Really delete component?')) {
+    if (confirm('Really delete meal component?')) {
       componentsService.destroyComponent(eventId, mealId, component.id)
         .then(() => removeComponent(component.id))
-        .catch((err) => setErrors(err));
+        .catch((err) => setErrors([err]));
     }
-  };
-
-  const toggleComponentCompleted = (component) => {
-    const completed = !component.completed;
-    const updatedComponent = { ...component, completed };
-    updateComponent(updatedComponent);
-    componentsService.updateComponent(eventId, mealId, updatedComponent)
-      .then((apiComponent) => updateComponent(apiComponent))
-      .catch((err) => setErrors(err));
   };
 
   useEffect(() => {
@@ -67,42 +55,22 @@ const ShowMeal = () => {
         addMeal(meal);
         addComponents(meal.components);
       })
-      .catch((res) => setErrors(res))
+      .catch((res) => setErrors([res]))
       .finally(() => setLoading(false));
   }, [mealExists, mealsService, setLoading, setErrors, addMeal]);
 
   const renderErrors = () => {
-    return errors.map((error) => (<div>{error}</div>));
+    return errors.map((error) => (<div>{JSON.stringify(error)}</div>));
   };
 
   const renderComponent = (component) => {
     return (
-      <div className="box columns is-mobile my-3">
-        <div className="column">
-          {component.name}
-        </div>
-        <div className="column">
-          {component.amount} {component.unit}
-        </div>
-        <div className="column">
-          <label className="checkbox">
-            <input
-              type="checkbox"
-              className="checkbox"
-              checked={component.completed}
-              readOnly
-              onClick={() => toggleComponentCompleted(component)}
-            />
-            {' '}Completed
-          </label>
-        </div>
-        <button
-          onClick={() => deleteComponent(component)}
-          className="button is-small is-danger"
-        >
-          Delete
-        </button>
-      </div>
+      <ComponentListItem
+        component={component}
+        key={`component-list-item-${component.id}`}
+        onToggleComplete={toggleComponentCompleted}
+        onDelete={deleteComponent}
+      />
     );
   };
 
@@ -114,8 +82,8 @@ const ShowMeal = () => {
         <h1 className="title is-1">{meal.name}</h1>
         {meal.notes && (<p>{meal.notes}</p>)}
       </div>
+      {renderErrors()}
       <div className="block">
-        {renderErrors()}
         {components.map(renderComponent)}
       </div>
       <div className="block">
