@@ -5,8 +5,6 @@ import { eventsActionTypes } from 'store/action-types';
 import { Event } from 'types/models';
 
 
-
-
 describe('events actions module', () => {
   describe('addEvent', () => {
     it('returns an add event action for given event', () => {
