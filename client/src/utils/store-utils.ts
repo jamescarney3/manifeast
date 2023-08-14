@@ -67,12 +67,6 @@ const normalizeResource = <R>(
   }, {} as R);
 };
 
-// shorthand to make sure accessors can handle eventId foreign
-const matchByEventIdentifier = <R>(resource: R, identifier: string) => {
-  const { eventId, eventEditToken } = resource;
-  return [eventId, eventEditToken].includes(identifier);
-};
-
 
 export default {
   mergeResource,
@@ -80,5 +74,4 @@ export default {
   removeResource,
   updateResource,
   normalizeResource,
-  matchByEventIdentifier,
 };
