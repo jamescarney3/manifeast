@@ -37,6 +37,12 @@ class Api::V1::ApplicationController < ApplicationController
     false
   end
 
+  def ensure_event_access(identifier)
+    if not event_access_allowed?(identifier)
+      render json: ['Unauthorized to access resources for event'], status: 401
+    end
+  end
+
   def logged_in?
     !!current_user
   end
