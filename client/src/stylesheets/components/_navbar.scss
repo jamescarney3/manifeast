@@ -1,0 +1,48 @@
+@import 'bulma/sass/utilities/_all.sass';
+
+$navbar-burger-span-width: 48px;
+$navbar-burger-span-height: 4px;
+
+// tune hamburger behavior on smaller viewports
+@include touch {
+  nav {
+    * {
+      font-size: $size-2;
+    }
+
+    .navbar-burger {
+      width: 6.5rem;
+      height: 6.5rem;
+
+      &.is-active {
+        span{
+          &:first-child {
+            transform: translateY(($navbar-burger-span-width / 3)) rotate(45deg);
+          }
+
+          &:nth-child(3) {
+            transform: translateY(-($navbar-burger-span-width / 3)) rotate(-45deg);
+          }
+        }
+      }
+
+      span {
+        width: $navbar-burger-span-width;
+        height: $navbar-burger-span-height;
+        left: calc(50% - ($navbar-burger-span-width / 2));
+
+        &:first-child {
+          top: calc(50% - ($navbar-burger-span-width / 3));
+        }
+
+        &:nth-child(2) {
+          top: calc(50%)
+        }
+
+        &:nth-child(3) {
+          top: calc(50% + ($navbar-burger-span-width / 3))
+        }
+      }
+    }
+  }
+}

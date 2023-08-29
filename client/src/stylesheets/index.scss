@@ -1,4 +1,6 @@
-@import 'bulma';
+@use 'bulma';
+
+@use 'components/navbar';
 
 .button.is-light.like-link:not(:hover) {
   background-color: white;
